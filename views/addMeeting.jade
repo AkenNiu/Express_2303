@@ -1,0 +1,110 @@
+extends layout
+block pageStyle
+  link(rel="stylesheet",type="text/css",href="css/DateTimePicker.css")
+block content
+
+  //- 1. 会议日期meetingDate
+    2. 会议开始时间meetingStart
+    3. 会议结束meetingEnd
+    4. 会议时长meetingDuration
+    5. 会议主题meetingTopic
+    6. 会议部门meetingGroup
+
+  //- "meetingDate":req.body.meetingDate,
+  //- "addDate":req.body.addDate,
+  //- "meetingStart":req.body.meetingStart,
+  //- "meetingEnd":req.body.meetingEnd,
+  //- "meetingDuration":req.body.meetingDuration,
+  //- "meetingTopic":req.body.meetingTopic,
+  //- "meetingGroup":req.body.meetingGroup
+
+
+  - var dates=[];
+  - var datestr;
+  - var myDate = new Date();
+  - var today = myDate.toLocaleDateString();
+  //- var today = myDate.getDate();       
+  - for (var i = 0; i < 5; i++) {
+    - datestr=myDate.toLocaleDateString();
+    - dates.push(datestr);
+    - myDate.setTime(myDate.getTime() + 1000*60*60*24);
+  - }
+  h1 会议室申请
+  p #{today}
+  form#meeting(method="post",action="/addpost")
+    .label-item
+      label(for="meetingDate")
+        span 
+          | 日期
+        select#date(name="meetingDate")
+          - each item in dates
+            option(value='#{item}') #{item}
+        input(type="hidden",name="addDate",value="#{today}")
+    .label-item
+      label(for="meetingStart")
+        span 
+          | 开始
+        input#start(type="text",data-field="time",data-startend="start",readonly,name="meetingStart",data-startendelem="#end")
+    .label-item
+      label(for="meetingEnd")
+        span 
+          | 结束
+        input#end(type="text",data-field="time",data-startend="end",readonly,name="meetingEnd",data-startendelem="#start")
+    .label-item
+      label(for="meetingDuration")
+        span 
+          | 时长
+        //- span#meetingDuration
+        input#meetingDuration(type="text",name="meetingDuration",readonly)
+    .label-item
+      label(for="meetingTopic")
+        span 
+          | 议题
+        input(type="text",name="meetingTopic")
+    .label-item
+      label(for="meetingGroup")
+        span
+          | 使用者
+        select#for(name="meetingGroup")
+          option(value='default') --
+          option(value='八五') 八五
+          option(value='66KM') 66KM
+          option(value='政务') 政务
+          option(value='数据') 数据
+          option(value='营销') 营销
+    .label-item
+      label(for="meetingKey")
+        span 
+          | 修改码
+        input(type="number",placeholder="输入一串数字方便编辑本信息",name="meetingKey")
+
+    .label-item
+      input(type="submit",value="提交")
+  #dtBox
+block pageScript
+  script(type='text/javascript',src="/js/DateTimePicker.js")
+  script.
+    $(document).ready(function(){
+      $("#dtBox").DateTimePicker();
+
+      $('#start,#end').on('change',function(){
+        var meetingDate = $('#date').val();
+        var meetingDuration;
+        var durH = ''
+        if($('#start').val()&&$('#end').val()){
+
+          var meetingStart = new Date(meetingDate+' '+$('#start').val());
+          var meetingEnd = new Date(meetingDate+' '+$('#end').val());
+          meetingDuration = (meetingEnd - meetingStart)/1000/60;
+          var h = parseInt(meetingDuration/60);
+          var m = meetingDuration - h*60;
+          if(h){
+              durH += h +'小时'
+          }
+          if(m){
+              durH += m +'分钟'
+          }
+          $('#meetingDuration').val(durH);
+        }
+      })
+    });

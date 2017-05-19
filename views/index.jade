@@ -1,0 +1,17 @@
+/*jade 对缩进控制严格，稍不注意就出错 */
+extends layout
+block content
+    h1.
+        User List
+    table
+      thead
+        tr
+          th 网站名称
+          th 网址
+      tbody
+        each site, i in siteList
+            tr
+              td
+                a(href="http://" + "#{site.url}")= site.name
+              td
+                span= site.url

@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= FORM
+  p Form test~
+
+  form(method="post",action="/")
+    input(type="text",name="siteName")
+    input(type="text",name="siteURL")
+    input(type="submit",value="提交")
+block pageScript
+  //- script(type='text/javascript').
+  //-   $('input').on('blur',function(){
+  //-     $.post("/abc", { name: "John", time: "2pm" },
+  //-     function(data){
+  //-       alert("Data Loaded: " + data);
+  //-     });
+  //-     })

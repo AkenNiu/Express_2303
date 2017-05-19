@@ -1,0 +1,373 @@
+extends layout
+
+
+
+
+block pageStyle
+  - var n =parseInt(Math.random()*11+1)
+  - if(n<=9) {n='0'+n}
+  - bgStr= 'https://momentumdash.com/backgrounds/'+n+'.jpg'//- 
+  link(rel="stylesheet",href="/css/swiper.min.css")
+  style.
+    body{
+      background:#369;
+    }
+    body{
+      background-image: url(#{bgStr});
+      background-size:cover;
+    }
+    //- body{
+    //-     background-image: url(/images/bg-1-xs.jpg);
+    //-     background-size:cover;
+    //- }
+    //- #background{
+    //-     position: absolute;
+    //-     top: 0;
+    //-     left: 0;
+    //-     right: 0;
+    //-     bottom: 0;
+    //-     background-image: url(/images/bg-1-xl.jpg);
+    //-     background-size:cover;
+    //- }
+    .warpper{
+      width:320px;
+      height:540px;
+      position:absolute;
+      left:15px;
+      top:15px;
+      //- margin:0 auto;
+      background:#fff;
+      box-shadow: 0 15px 15px rgba(0,0,0,.2);
+      border-radius: 3px;
+      display:flex;
+      flex-flow:column;
+      //- overflow:hidden;
+    }
+    .warpper.minify{
+      height:auto;
+      background:none;
+      border-radius: 10px;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.17) 0%,rgba(0, 0, 0, 0.55) 55%,rgba(0, 0, 0, 0.78) 100%);
+      box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.46);
+    }
+    .minify .date-list,.minify .date-cell,.minify .action-list,.minify .time-cells{
+      display:none;
+    }
+    .minify .time-screen{
+      box-shadow: 0 -5px 5px rgba(0,0,0,.1);
+      //- border-radius: 10px;
+      background: none;
+    }
+    .date-list{
+      padding:0 5px;
+      margin:0;
+    }
+    .date-cell{
+      padding:0;
+      margin:0;
+      list-style: none;
+      display: inline-block;
+      width: 20%;
+      box-sizing: border-box;
+      padding: 5px;
+    }
+    .date-week{
+      transform:scale(0.6);
+      line-height:10px;
+    }
+    .date-cell a{
+      text-decoration:none;
+      border: 1px solid #ccc;
+      display: block;
+      border-radius:3px;
+      padding:3px;
+      color:#666;
+    }
+    .date-cell a.active,.date-cell a:hover{
+      border:1px solid #e60000;
+      color:#e60000;
+    }
+    .date-cell span{
+      display:block;
+      text-align:center;
+      font-size:12px;
+    }
+    .date-cell span.date-num{
+      font-size:16px;
+    }
+    .time-screen{
+      display:flex;
+      background: -moz-linear-gradient(top, #ff4e4c 0%,#c50200 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff4e4c), color-stop(100%,#c50200));
+      background: -webkit-linear-gradient(top, #ff4e4c 0%,#c50200 100%);
+      background: -o-linear-gradient(top, #ff4e4c 0%,#c50200 100%);
+      background: -ms-linear-gradient(top, #ff4e4c 0%,#c50200 100%);
+      background: linear-gradient(to bottom, #ff4e4c 0%,#c50200 100%);
+      //- margin-left: -10px;
+      box-shadow:inset inset 0 -5px 5px rgba(0,0,0,.1);
+    }
+    .pre-arrow,.next-arrow{
+      position: absolute;
+      top: 50%;
+      margin-top: -15px;
+      width: 24px;
+      line-height: 24px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.25);
+      z-index:100;
+    }
+    .pre-arrow:hover,.next-arrow:hover{
+      color: rgba(255, 255, 255, 0.75);
+    }
+    .pre-arrow{
+      left:0;
+    }
+    .next-arrow{
+      right:0;
+    }
+    .time-clock {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 15px 20px;
+      border-radius: 50%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.64) 0%,rgba(255, 255, 255, 0.06) 75%,rgba(255, 255, 255, 0) 100%);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.88), 0 0 25px rgba(0, 0, 0, 0.222);
+    }
+    .time-h{
+      width: 30px;
+      height: 4px;
+      background: #fff;
+      border-radius: 3px;
+      transform-origin: right center;
+      position: absolute;
+      right: 50%;
+      top: 50%;
+      margin-top: -2px;
+      transform: rotate(90deg);
+      transition: 1s;
+    }
+    .time-m{
+      width: 45px;
+      height: 2px;
+      background: #fff;
+      border-radius: 3px;
+      transform-origin: right center;
+      position: absolute;
+      right: 50%;
+      top: 50%;
+      margin-top: -1px;
+      transform: rotate(90deg);
+      transition: 1s;
+    }
+    .time-text-con {
+      color:#fff;
+      //- align-items: center;
+      justify-content: center;
+      display: flex;
+      flex: 1;
+      flex-flow: column;
+      text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.15);
+      position: relative;
+      font-size: 18px;
+    }
+    .time-text-con sub {
+      font-size: 14px;
+      line-height: 14px;
+      margin-bottom: 5px;
+    }
+    .time-text{
+      position:relative;
+      font-size: 28px;
+      vertical-align:bottom;
+      margin-bottom:10px;
+    }
+    .time-cells{
+      margin: 0 15px;
+      box-sizing: border-box;
+    }
+    .time-action{
+      text-align:center;
+    }
+    .time-action .swiper-slide{
+      box-sizing: border-box;
+    }
+    .time-action-img{
+      padding:5px;
+    }
+    #swiper-container1{
+      width:100%;
+      z-index: 10;
+      box-shadow: 0 2px 5px rgba(0,0,0,.3);
+      border-radius: 10px;
+    }
+    .action-con {
+      position: absolute;
+      right: 10px;
+      left: 10px;
+      top: 100%;
+      background: rgba(255, 255, 255, 0.54);
+      margin: 0;
+      z-index: 1;
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,.3);
+    }
+    .action-text{
+      text-shadow: 0 1px rgba(255, 255, 255, 0.24);
+    }
+    .warpper .action-con {
+      overflow:hidden;
+    }
+    .action-arrow-down, .action-arrow-up {
+      text-align: center;
+      background: -webkit-linear-gradient(rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.11) 100%);
+      background: -o-linear-gradient(rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.11) 100%);
+      background: linear-gradient(rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.11) 100%);
+    }
+    .action-arrow-down{
+      transition: all 0.12s ease;
+    }
+    .warpper:hover .action-arrow-down,.warpper.open .action-arrow-up{
+      height:14px; 
+      display:block;
+    }
+    .warpper.open .action-list{
+      display:block;
+    }
+    .action-arrow-down,.warpper.open .action-arrow-down,.action-arrow-up{
+      height:0;
+      overflow:hidden;
+    }
+    .action-item {
+      padding: 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.21);
+      display: flex;
+    }
+    .action-item .action-photo {
+      width: 32px;
+      height: 32px;
+      background: #ccc;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 10px;
+    }
+    .action-item h3{
+      font-weight:normal;
+      font-size:16px;
+      margin-bottom:5px;
+    }
+    .action-item p{
+      font-size:12px;
+      font-weight:100;
+      color:rgba(0,0,0,0.7);
+    }
+
+    //- .action-content.show{
+    //-   display:block;
+    //- }
+block content
+  //- h1= FORM
+  //- p Form test~
+
+  //- form(method="post",action="/meeting")
+  //-   input(type="text",name="meetingStart")
+  //-   input(type="text",name="meetingTime")
+  //-   input(type="submit",value="提交")
+  - var dates=[];
+  - var datestr_m;
+  - var datestr_d;
+  - var datestr_w;
+  - var myDate = new Date();
+  - var show_day=new Array('星期一','星期二','星期三','星期四','星期五','星期六','星期日'); 
+  
+  - var today =  myDate.getDate();       
+  - for (var i = 0; i < 5; i++) {
+    - datestr_y=myDate.getFullYear();
+    - datestr_m=Number(myDate.getMonth()) + 1;
+    - datestr_d=myDate.getDate();
+    - var week =myDate.getDay();  
+    - datestr_w = show_day[week]
+    - dates.push({y:datestr_y,m:datestr_m,d:datestr_d,w:datestr_w});
+    - myDate.setTime(myDate.getTime() + 1000*60*60*24);
+  - }
+  #background
+  .warpper.minify 
+    ul.date-list
+      - each item in dates
+        -if(item.d == today)
+          li.date-cell
+             a.active(href="##{item.y}-#{item.m}-#{item.d}")
+              span.date-week #{item.w}
+              span.date-num #{item.d}
+        -else
+          li.date-cell
+             a(href="##{item.y}-#{item.m}-#{item.d}")
+              span.date-week #{item.w}
+              span.date-num #{item.d}
+    #swiper-container1.swiper-container
+      ul.swiper-wrapper
+        each meeting in meetingList
+          - var arr=meeting.meetingStart.split(":");
+          - var time_h = parseInt(arr[0])%12;
+          - var time_m = parseInt(arr[1]);
+          -var rotate_h =90+time_h/12*360+'deg'
+          -var rotate_m =90+time_m/60*360+'deg'
+          .time-screen.swiper-slide
+            .time-clock
+              .time-h(style="transform:rotate(#{rotate_h})")
+              .time-m(style="transform:rotate(#{rotate_m})")
+            .time-text-con
+              .time-text= meeting.meetingTopic
+                sub= meeting.meetingDuration
+              .time-task= meeting.meetingStart + "~" + meeting.meetingEnd 
+      .pre-arrow
+        i.fa.fa-chevron-left
+      .next-arrow
+        i.fa.fa-chevron-right
+    //- .time-cells#swiper-container1.swiper-container
+    //-   ul.time-action.swiper-wrapper
+    //-     each meeting in meetingList
+    //-       li.swiper-slide
+    //-         .time-action-item
+    //-           .time-action-img
+    //-             img(src="") 
+    //-           span.time-action-item= meeting.meetingStart
+    
+    .action-con
+      .action-arrow-down
+        i.fa.fa-angle-double-down
+      ul.action-list
+        each meeting in meetingList
+          li.action-item
+            .action-photo
+              img(src="")
+            .action-text
+              h3= meeting.meetingTopic
+              p
+                -if (meeting.meetingGroup)
+                  span= meeting.meetingGroup + ' '
+                span= meeting.meetingStart +' ~ ' + meeting.meetingEnd + ' '
+                
+      .action-arrow-up
+        i.fa.fa-angle-double-up
+
+block pageScript
+  script(src="/js/swiper.min.js")
+  script(type='text/javascript').
+    var Swiper1 = new Swiper('#swiper-container1',{
+      prevButton:'.pre-arrow',
+      nextButton:'.next-arrow'
+      })
+  script(type='text/javascript').
+    $('.action-arrow-down').on('click',function(){
+      $('.warpper').addClass('open');
+    })
+    $('.action-arrow-up').on('click',function(){
+      $('.warpper').removeClass('open');
+    })
+    //- $('.date-cell a').on('click',function(){
+    //-   $.post("/abc", { name: "John", time: "2pm" },
+    //-   function(data){
+    //-     alert("Data Loaded: " + data);
+    //-   });
+    //-   })
