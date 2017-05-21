@@ -1,6 +1,92 @@
 extends layout
 block pageStyle
   link(rel="stylesheet",type="text/css",href="css/DateTimePicker.css")
+  - var n =parseInt(Math.random()*11+1)
+  - if(n<=9) {n='0'+n}
+  - bgStr= 'https://momentumdash.com/backgrounds/'+n+'.jpg'//- 
+  link(rel="stylesheet",href="/css/swiper.min.css")
+  style.
+    body{
+      background:#369;
+    }
+    body{
+      background-image: url(#{bgStr});
+      background-size:cover;
+      color:#fff;
+    }
+    //- body{
+    //-     background-image: url(/images/bg-1-xs.jpg);
+    //-     background-size:cover;
+    //- }
+    //- #background{
+    //-     position: absolute;
+    //-     top: 0;
+    //-     left: 0;
+    //-     right: 0;
+    //-     bottom: 0;
+    //-     background-image: url(/images/bg-1-xl.jpg);
+    //-     background-size:cover;
+    //- }
+    .form-contnet{
+      width:620px;
+      height:540px;
+      margin:0 auto;
+      margin-top:90px;
+      text-shadow: 1px 1px 1px rgba(0,0,0,.4);
+    }
+    .form-contnet h1{
+      font-size:48px;
+      font-weight:300;
+      margin-bottom:40px;
+      text-align:center;
+    }
+    .label-item{
+      width:310px;
+      display:inline-block;
+    }
+    .label-item.full{
+     display:block; 
+      width:620px;
+    }
+    .label-item.full input{
+      width:605px;
+    }
+    label {
+      //- display: block;
+      margin-right:15px;
+    }
+
+    label span {
+        display: block;
+        font-size: 18px;
+        //- font-weight: 100;
+        padding: 5px;
+    }
+    button, input, select, textarea {
+        font-size: 100%;
+        background:rgba(0,0,0,.4);
+        padding: 10px;
+        border-radius:0;
+        border: none;
+        font-size: 18px;
+        min-height: 32px;
+        line-height: 32px;
+        width: 295px;
+        //- box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+    }
+    input[type="submit"]{
+      background:#fff;
+      color:#000;
+    }
+    select{
+      height: 53px;
+    }
+    input:active,input:focus{
+      background:rgba(0,0,0,.5)
+    }
+    .m-t{
+      margin-top:20px;
+    }
 block content
 
   //- 1. 会议日期meetingDate
@@ -29,58 +115,59 @@ block content
     - dates.push(datestr);
     - myDate.setTime(myDate.getTime() + 1000*60*60*24);
   - }
-  h1 会议室申请
-  p #{today}
-  form#meeting(method="post",action="/addpost")
-    .label-item
-      label(for="meetingDate")
-        span 
-          | 日期
-        select#date(name="meetingDate")
-          - each item in dates
-            option(value='#{item}') #{item}
-        input(type="hidden",name="addDate",value="#{today}")
-    .label-item
-      label(for="meetingStart")
-        span 
-          | 开始
-        input#start(type="text",data-field="time",data-startend="start",readonly,name="meetingStart",data-startendelem="#end")
-    .label-item
-      label(for="meetingEnd")
-        span 
-          | 结束
-        input#end(type="text",data-field="time",data-startend="end",readonly,name="meetingEnd",data-startendelem="#start")
-    .label-item
-      label(for="meetingDuration")
-        span 
-          | 时长
-        //- span#meetingDuration
-        input#meetingDuration(type="text",name="meetingDuration",readonly)
-    .label-item
-      label(for="meetingTopic")
-        span 
-          | 议题
-        input(type="text",name="meetingTopic")
-    .label-item
-      label(for="meetingGroup")
-        span
-          | 使用者
-        select#for(name="meetingGroup")
-          option(value='default') --
-          option(value='八五') 八五
-          option(value='66KM') 66KM
-          option(value='政务') 政务
-          option(value='数据') 数据
-          option(value='营销') 营销
-    .label-item
-      label(for="meetingKey")
-        span 
-          | 修改码
-        input(type="number",placeholder="输入一串数字方便编辑本信息",name="meetingKey")
+  .form-contnet
 
-    .label-item
-      input(type="submit",value="提交")
-  #dtBox
+    h1 会议室申请
+    form#meeting(method="post",action="/addpost")
+      .label-item
+        label(for="meetingDate")
+          span 
+            | 日期
+          select#date(name="meetingDate")
+            - each item in dates
+              option(value='#{item}') #{item}
+          input(type="hidden",name="addDate",value="#{today}")
+      .label-item
+        label(for="meetingGroup")
+          span
+            | 使用者
+          select#for(name="meetingGroup")
+            option(value='default') --
+            option(value='八五') 八五
+            option(value='66KM') 66KM
+            option(value='政务') 政务
+            option(value='数据') 数据
+            option(value='营销') 营销
+      .label-item
+        label(for="meetingStart")
+          span 
+            | 开始
+          input#start(type="text",data-field="time",data-startend="start",readonly,name="meetingStart",data-startendelem="#end")
+      .label-item
+        label(for="meetingEnd")
+          span 
+            | 结束
+          input#end(type="text",data-field="time",data-startend="end",readonly,name="meetingEnd",data-startendelem="#start")
+      .label-item.full
+        label(for="meetingTopic")
+          span 
+            | 议题
+          input(type="text",name="meetingTopic")
+      .label-item
+        label(for="meetingDuration")
+          span 
+            | 时长
+          //- span#meetingDuration
+          input#meetingDuration(type="text",name="meetingDuration",readonly)
+      .label-item
+        label(for="meetingKey")
+          span 
+            | 修改码
+          input(type="number",placeholder="输入一串数字方便编辑本信息",name="meetingKey")
+
+      .label-item.full.m-t
+        input(type="submit",value="提交")
+    #dtBox
 block pageScript
   script(type='text/javascript',src="/js/DateTimePicker.js")
   script.
