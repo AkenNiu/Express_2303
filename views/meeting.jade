@@ -292,67 +292,63 @@ block content
   - }
   #background
   .warpper.minify 
-    ul.date-list
-      - each item in dates
-        -if(item.d == today)
-          li.date-cell
-             a.active(href="##{item.y}-#{item.m}-#{item.d}")
-              span.date-week #{item.w}
-              span.date-num #{item.d}
-        -else
-          li.date-cell
-             a(href="##{item.y}-#{item.m}-#{item.d}")
-              span.date-week #{item.w}
-              span.date-num #{item.d}
-    #swiper-container1.swiper-container
-      ul.swiper-wrapper
-        each meeting in meetingList
-          - var arr=meeting.meetingStart.split(":");
-          - var time_h = parseInt(arr[0])%12;
-          - var time_m = parseInt(arr[1]);
-          -var rotate_h =90+time_h/12*360+'deg'
-          -var rotate_m =90+time_m/60*360+'deg'
-          .time-screen.swiper-slide
-            .time-clock
-              .time-h(style="transform:rotate(#{rotate_h})")
-              .time-m(style="transform:rotate(#{rotate_m})")
-            .time-text-con
-              .time-text= meeting.meetingTopic
-                sub= meeting.meetingDuration
-              .time-task= meeting.meetingStart + "~" + meeting.meetingEnd 
-      .pre-arrow
-        i.fa.fa-chevron-left
-      .next-arrow
-        i.fa.fa-chevron-right
-    //- .time-cells#swiper-container1.swiper-container
-    //-   ul.time-action.swiper-wrapper
-    //-     each meeting in meetingList
-    //-       li.swiper-slide
-    //-         .time-action-item
-    //-           .time-action-img
-    //-             img(src="") 
-    //-           span.time-action-item= meeting.meetingStart
-    
-    .action-con
-      .action-arrow-down
-        i.fa.fa-angle-double-down
-      ul.action-list
-        li.action-item
-          a(href="/addMeeting") 添加会议
-        each meeting in meetingList
-
+    -if(!meetingList.length)
+      ul.action-list(style="display:block")
+        li.action-item.add(style="text-align:center")
+          a(href="/addMeeting",style="flex: 1;color: #fff;") 添加会议
+    -else
+      ul.date-list
+        - each item in dates
+          -if(item.d == today)
+            li.date-cell
+               a.active(href="##{item.y}-#{item.m}-#{item.d}")
+                span.date-week #{item.w}
+                span.date-num #{item.d}
+          -else
+            li.date-cell
+               a(href="##{item.y}-#{item.m}-#{item.d}")
+                span.date-week #{item.w}
+                span.date-num #{item.d}
+      #swiper-container1.swiper-container
+        ul.swiper-wrapper
+          each meeting in meetingList
+            - var arr=meeting.meetingStart.split(":");
+            - var time_h = parseInt(arr[0])%12;
+            - var time_m = parseInt(arr[1]);
+            -var rotate_h =90+time_h/12*360+'deg'
+            -var rotate_m =90+time_m/60*360+'deg'
+            .time-screen.swiper-slide
+              .time-clock
+                .time-h(style="transform:rotate(#{rotate_h})")
+                .time-m(style="transform:rotate(#{rotate_m})")
+              .time-text-con
+                .time-text= meeting.meetingTopic
+                  sub= meeting.meetingDuration
+                .time-task= meeting.meetingStart + "~" + meeting.meetingEnd 
+        .pre-arrow
+          i.fa.fa-chevron-left
+        .next-arrow
+          i.fa.fa-chevron-right
+      .action-con
+        .action-arrow-down
+          i.fa.fa-angle-double-down
+        ul.action-list
           li.action-item
-            .action-photo
-              img(src="")
-            .action-text
-              h3= meeting.meetingTopic
-              p
-                -if (meeting.meetingGroup)
-                  span= meeting.meetingGroup + ' '
-                span= meeting.meetingStart +' ~ ' + meeting.meetingEnd + ' '
-                
-      .action-arrow-up
-        i.fa.fa-angle-double-up
+            a(href="/addMeeting") 添加会议
+          each meeting in meetingList
+
+            li.action-item
+              .action-photo
+                img(src="")
+              .action-text
+                h3= meeting.meetingTopic
+                p
+                  -if (meeting.meetingGroup)
+                    span= meeting.meetingGroup + ' '
+                  span= meeting.meetingStart +' ~ ' + meeting.meetingEnd + ' '
+                  
+        .action-arrow-up
+          i.fa.fa-angle-double-up
 
 block pageScript
   script(src="/js/swiper.min.js")
