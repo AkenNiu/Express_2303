@@ -195,7 +195,8 @@ router.get('/addpost',function(req, res, next) {
 
 router.post('/addpost',function (req, res, next) {
     var callback = function(meetings){
-        res.send('addpost',{meetingList: meetings});
+        // res.send('addpost',{meetingList: meetings});
+        res.render('addpost',{meetingList: meetings});
     };
     insertMeetData(req,callback);
 });
