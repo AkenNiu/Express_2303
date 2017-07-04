@@ -1,8 +1,5 @@
 extends layout
 
-
-
-
 block pageStyle
   - var n =parseInt(Math.random()*11+1)
   - if(n<=9) {n='0'+n}
@@ -262,9 +259,7 @@ block pageStyle
       color:rgba(0,0,0,0.7);
     }
 
-    //- .action-content.show{
-    //-   display:block;
-    //- }
+    
 block content
   //- h1= FORM
   //- p Form test~
@@ -323,8 +318,8 @@ block content
                 .time-m(style="transform:rotate(#{rotate_m})")
               .time-text-con
                 .time-text= meeting.meetingTopic
-                  sub= meeting.meetingDuration
                 .time-task= meeting.meetingStart + "~" + meeting.meetingEnd 
+                  span(style="font-size:10px;font-weight:lighter;")=' '+ meeting.meetingDuration
         .pre-arrow
           i.fa.fa-chevron-left
         .next-arrow
@@ -334,7 +329,7 @@ block content
           i.fa.fa-angle-double-down
         ul.action-list
           li.action-item
-            a(href="/addMeeting") 添加会议
+            a(href="/addMeeting",style="color:#333;") 添加会议
           each meeting in meetingList
 
             li.action-item
@@ -349,14 +344,53 @@ block content
                   
         .action-arrow-up
           i.fa.fa-angle-double-up
-
+  
 block pageScript
+  - var meetingTime = new Array();
+  - var meetingEnd = new Array();
+  each meeting in meetingList
+    - var a ="'"+ meeting.meetingStart+ "'" ;
+    - var b ="'"+ meeting.meetingEnd+ "'" ;
+    - meetingTime.push([a]);
+    - meetingEnd.push([b]);
+  script(src="/js/timecompare.js")
   script(src="/js/swiper.min.js")
+  script(src="http://libs.cdnjs.net/moment.js/2.9.0/moment.min.js")
   script(type='text/javascript').
     var Swiper1 = new Swiper('#swiper-container1',{
-      prevButton:'.pre-arrow',
-      nextButton:'.next-arrow'
+        prevButton:'.pre-arrow',
+        nextButton:'.next-arrow'
       })
+    var timeStartArray = [#{meetingTime}];
+    var timeEndArray = [#{meetingEnd}];
+
+    var timeNow = moment();
+    var todayTime = new moment().format('YYYY-MM-DD');
+    for( var i=0;i<timeEndArray.length;i++){
+    var isNowBetween;
+      if (i==0){
+          isNowBetween =  moment(timeNow).isBetween(todayTime+' 00:00',todayTime+' '+timeEndArray[i]); 
+          //- console.log(todayTime+' 00:00'+"~~~~~"+todayTime+' '+timeEndArray[i] + " ~~"+isNowBetween);
+        }
+      else if(i==timeEndArray){
+          isNowBetween =  moment(timeNow).isBetween(todayTime+' '+timeEndArray[i-1],todayTime+' 23:59'); 
+          //- console.log(todayTime+' '+timeEndArray[i-1]+'~~~~~~'+todayTime+' '+timeEndArray[i] + " ~~"+isNowBetween);
+      }
+      else{
+          isNowBetween =  moment(timeNow).isBetween(todayTime+' '+timeEndArray[i-1],todayTime+' '+timeEndArray[i]); 
+          //- console.log(todayTime+' '+timeEndArray[i-1]+'~~~~~~'+todayTime+' '+timeEndArray[i] + " ~~"+isNowBetween);
+      }
+     
+     if(isNowBetween){
+      console.log('现在正在进行第'+(i+1)+'个会议');
+      Swiper1.slideTo(i);
+      break;
+
+     }
+    else{
+      console.log('没有')
+    }
+    }
   script(type='text/javascript').
     $('.action-arrow-down').on('click',function(){
       $('.warpper').addClass('open');
@@ -364,9 +398,11 @@ block pageScript
     $('.action-arrow-up').on('click',function(){
       $('.warpper').removeClass('open');
     })
-    //- $('.date-cell a').on('click',function(){
-    //-   $.post("/abc", { name: "John", time: "2pm" },
-    //-   function(data){
-    //-     alert("Data Loaded: " + data);
-    //-   });
-    //-   })
+  
+    $('.date-cell a').on('click',function(){
+      $.post("/abc", { name: "John", time: "2pm" },
+      function(data){
+        alert("Data Loaded: " + data);
+      });
+      })
+  

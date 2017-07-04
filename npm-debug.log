@@ -7,7 +7,7 @@
 6 silly lifecycle mongotest@0.0.0~prestart: no script for prestart, continuing
 7 info lifecycle mongotest@0.0.0~start: mongotest@0.0.0
 8 verbose lifecycle mongotest@0.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle mongotest@0.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/Aken/Documents/study/node/myapp/mongotest/node_modules/.bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Mono.framework/Versions/Current/Commands
+9 verbose lifecycle mongotest@0.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/Aken/Documents/study/node/myapp/mongotest/node_modules/.bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/aria2/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands
 10 verbose lifecycle mongotest@0.0.0~start: CWD: /Users/Aken/Documents/study/node/myapp/mongotest
 11 silly lifecycle mongotest@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
 12 silly lifecycle mongotest@0.0.0~start: Returned: code: 1  signal: null

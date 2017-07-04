@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var moment = require('moment');
 var MongoClient = require('mongodb').MongoClient;
 var DB_CONN_STR = 'mongodb://localhost:27017/meeting'; // 数据库为 meeting
 
@@ -66,10 +67,16 @@ var findMeetings = function(whereStr,callback){
 var insertMeetData = function(req,callback){
     MongoClient.connect(DB_CONN_STR,function(err,db){
         var collection = db.collection('meetings');
+        // var meetingStartTime = req.body.meetingDate +' '+ req.body.meetingStart;
+        //     meetingStartTime = new moment(meetingStartTime).format('YYYY-MM-DD HH:MM');
+        //     meetingStartTimeStr = meetingStartTime.split(' ');
+        //     meetingStartTime = meetingStartTimeStr[1];
+        //     console.log(meetingStartTime +"sadasdasdas");
         var data ={
             "meetingDate":req.body.meetingDate,
             "addDate":req.body.addDate,
             "meetingStart":req.body.meetingStart,
+            // "meetingStart":meetingStartTime,
             "meetingEnd":req.body.meetingEnd,
             "meetingDuration":req.body.meetingDuration,
             "meetingTopic":req.body.meetingTopic,
@@ -131,11 +138,11 @@ router.post('/meeting', function(req, res, next) {
 //     }
 //     insertData(req,callback);
 // });
-// router.post('/abc', function (req, res, next) {
-//     var data ={"userID":req.body.userID,"password":req.body.password};
-//     res.send('hello world');
+router.post('/abc', function (req, res, next) {
+    var data ={"userID":req.body.userID,"password":req.body.password};
+    res.send('hello world');
 
-// });
+});
 
 
 //////
@@ -179,10 +186,6 @@ router.get('/form', function(req, res, next) {
 //     res.render('addMeeting');
 // });
 
-
-
-
-
 /////////////
 router.get('/addpost',function(req, res, next) {
     var callback = function(meetings){
@@ -200,7 +203,12 @@ router.post('/addpost',function (req, res, next) {
     };
     insertMeetData(req,callback);
 });
-
-
 /////////////////////////
 module.exports = router;
+
+
+
+
+
+
+
